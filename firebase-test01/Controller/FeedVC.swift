@@ -22,24 +22,14 @@ class FeedVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DataService.instance.getAllFeedMessages { (returnedMessagesArray) in
-            self.messageArray = returnedMessagesArray.reversed()
-            self.tableView.reloadData()
+        
+        DataService.instance.REF_FEED.observe(.value) { (snapshot) in
+            DataService.instance.getAllFeedMessages(handler: { (returnedMessagesArray) in
+                self.messageArray = returnedMessagesArray.reversed()
+                self.tableView.reloadData()
+            })
         }
     }
-    
-    // test
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(animated)
-    //
-    //        DataService.instance.REF_GROUPS.observe(.value) { (snapshot) in
-    //            DataService.instance.getAllFeedMessages { (returnedMessagesArray) in
-    //                self.messageArray = returnedMessagesArray.reversed()
-    //                self.tableView.reloadData()
-    //            }
-    //        }
-    //    }
-    
 }
 
 extension FeedVC: UITableViewDelegate, UITableViewDataSource {
